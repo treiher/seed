@@ -76,6 +76,10 @@ fn patch_el<'a, Ms, Mdl, INodes>(
         .clone();
     virtual_dom_bridge::patch_el_details(&mut old, new, &old_el_ws, mailbox);
 
+    for ref_ in &mut new.refs {
+        ref_.set(old_el_ws.clone());
+    }
+
     let old_children_iter = old.children.into_iter();
     let new_children_iter = new.children.iter_mut();
 
@@ -110,6 +114,9 @@ fn replace_by_el<'a, Ms>(
     mailbox: &Mailbox<Ms>,
 ) {
     let new_node = virtual_dom_bridge::make_websys_el(new, document);
+    for ref_ in &mut new.refs {
+        ref_.set(new_node.clone());
+    }
     new.node_ws = Some(new_node);
     for child in &mut new.children {
         virtual_dom_bridge::assign_ws_nodes(document, child);
