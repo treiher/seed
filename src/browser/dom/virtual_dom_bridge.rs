@@ -18,6 +18,9 @@ fn set_style(el_ws: &web_sys::Node, style: &Style) {
 
 pub(crate) fn assign_ws_nodes_to_el<Ms>(document: &Document, el: &mut El<Ms>) {
     let node_ws = make_websys_el(el, document);
+    for ref_ in &mut el.refs {
+        ref_.set(node_ws.clone());
+    }
     el.node_ws = Some(node_ws);
     for child in &mut el.children {
         assign_ws_nodes(document, child);
